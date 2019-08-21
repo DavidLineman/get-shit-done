@@ -1,12 +1,11 @@
 $(function () {
-
   // The taskHtml method takes in a JavaScript representation
   // of the task and produces an HTML representation using
   // <li> tags
   function taskHtml(task) {
     var checkedStatus = task.done ? "checked" : "";
     var liClass = task.done ? "completed" : "";
-    var liElement = '<li class="' + liClass + '">' +
+    var liElement = '<li id="listItem-' + task.id +'" class="' + liClass + '">' +
       '<div class="view"><input class="toggle" type="checkbox"' +
       " data-id='" + task.id + "'" +
       checkedStatus +
@@ -15,8 +14,7 @@ $(function () {
       '</label></div></li>';
 
     return liElement;
-  };
-
+  }
 
   // toggleTask takes in an HTML representation of the
   // an event that fires from an HTML representation of
@@ -32,13 +30,11 @@ $(function () {
       task: {
         done: doneValue
       }
-    }).success(function (data) {
+    }).success(function(data) {
       var liHtml = taskHtml(data);
       var $li = $("#listItem-" + data.id);
       $li.replaceWith(liHtml);
-      $('.toggle').change(toggleTask);
-
-    });
+    } );
   }
 
   $.get("/tasks").success(function (data) {
@@ -50,9 +46,10 @@ $(function () {
     var ulTodos = $('.todo-list');
     ulTodos.html(htmlString);
 
-    $('.toggle').change(toggleTask)
+    $('.toggle').change(toggleTask);
 
   });
+
 
   $('#new-form').submit(function (event) {
     event.preventDefault();
@@ -67,7 +64,6 @@ $(function () {
       var ulTodos = $('.todo-list');
       ulTodos.append(htmlString);
       $('.toggle').click(toggleTask);
-      $('.new-todo').val('');
     });
   });
 
