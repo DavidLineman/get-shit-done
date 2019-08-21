@@ -35,7 +35,13 @@ $(function () {
       task: {
         done: doneValue
       }
-    });
+    }).success(function (data) {
+      var liHtml = taskHtml;
+      var $li = $("#listItem-" + data.id);
+      $li.replaceWith(liHtml);
+      $('.toggle').change(toggleTask);
+
+    } );
   }
 
   $.get("/tasks").success(function (data) {
